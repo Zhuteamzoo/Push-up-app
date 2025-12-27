@@ -1,0 +1,67 @@
+#This was to get to know how to use mediapipe a bit better by putting dots on my body
+#Use python 3.10 for this 
+#If getting version bugs then use this:
+#cd "C:\Users\teren\OneDrive\Desktop\Python\ YOUR FILE HERE"
+#py -3.10 -m venv mp_env
+#mp_env\Scripts\activate
+#now you should be in python 3.10 
+
+
+#Good push up form:
+#1.Body is a straight line ideal angle is ~170-180
+#2.Elbow angle: top position ~180 down position ~90
+#3.Wrist almost under shoulders
+#4.Neck should be in good position(head)
+#5.Elbows angles close to body
+import cv2
+import mediapipe as mp
+
+cam = cv2.VideoCapture(0)
+mp_pose = mp.solutions.pose
+pose = mp_pose.Pose()
+
+while True:
+    _, frame = cam.read()
+    frame = cv2.flip(frame,1)
+    rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    output = pose.process(rgb_frame)
+    landmark_points = output.pose_landmarks
+    frame_h, frame_w, _ = frame.shape
+    if landmark_points:
+        landmarks = landmark_points.landmark
+
+    shoulders = [landmarks[11], landmarks[12]]
+    hip = [landmarks[23], landmarks[24]]
+    elbow = [landmarks[13], landmarks[14]]
+    head = [landmarks[0], landmarks[10]]
+    wrist = [landmarks[15],landmarks[16]]
+    hands = [landmarks[20],landmarks[21]]
+    knee = [landmarks[25],landmarks[26]]
+
+    for landmarks in elbow:
+        x = int(landmarks.x * frame_w)
+        y = int(landmarks.y * frame_h) 
+        cv2.circle(frame,(x,y), 3, (0,255,0))
+    for landmarks in shoulders:
+        x = int(landmarks.x * frame_w)
+        y = int(landmarks.y * frame_h)
+        cv2.circle(frame,(x,y), 3, (0,255,0))
+    for landmarks in head:
+        x = int(landmarks.x * frame_w)
+        y = int(landmarks.y * frame_h) 
+        cv2.circle(frame,(x,y), 3, (0,255,0))
+    for landmarks in hip:
+        x = int(landmarks.x * frame_w)
+        y = int(landmarks.y * frame_h)
+        cv2.circle(frame,(x,y), 3, (0,255,0))
+    for landmarks in knee:
+        x = int(landmarks.x * frame_w)
+        y = int(landmarks.y * frame_h)
+        cv2.circle(frame,(x,y), 3, (0,255,0))
+
+    cv2.imshow("Test Dots", frame)
+
+    if cv2.waitKey(1) & 0xFF == ord("q"):
+        break
+
+cv2.destroyAllWindows()
