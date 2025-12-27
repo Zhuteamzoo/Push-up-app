@@ -86,9 +86,8 @@ A push-up is considered valid **only if all conditions below are met**:
 
 ## 5. Assumptions
 
-- The user positions the camera so the upper body is visible.
-- The user performs push-ups facing the camera at a reasonable angle.
-- The alarm environment is stable (camera position does not change significantly).
+- The users full body is visible
+- The camera is facing the left side of the user
 
 ---
 
